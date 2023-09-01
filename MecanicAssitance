@@ -1,0 +1,52 @@
+import requests
+
+def store_txt(file1, dato):
+    file1.write(dato)
+    file1.write("\n")
+
+#Carga de patentes por archivo
+try:
+    archivo = open("patentes.txt", "r")
+except FileNotFoundError:
+    print("No se encontro el archivo de carga de datos")
+else:
+    table_plates = []
+
+    for line in archivo:
+        line2 = line.rstrip("\n")
+        table_plates.append(line2)
+finally:
+          
+    archivo.close()
+
+#Busqueda de patentes y almacenamiento
+try:
+    arch = open("archivo_resultados_test.txt","w")
+except FileNotFoundError:
+    print("No existe el archivo")
+
+else:
+    for p in table_plates:
+        plate = p.upper()
+
+        cabeceras = {"APIKEY": "NzA1Ok56QTFRVTlPVjJWaUlGTmxjblpwWTJVZ1JXMXBjMmx2", "patente": plate}
+
+        arch.write("Prueba en PROD servicio nuevo")
+        arch.write("\n")
+        url = "Insert the URL" + plate
+        r = requests.get(url, headers = cabeceras)
+        data = r.text
+        store_txt(arch,data)
+
+        arch.write("Prueba en UAT servicio nuevo")
+        arch.write("\n")
+        url = "Insert the PROD URL" + plate
+        r = requests.get(url, headers = cabeceras)
+        data1 = r.text        
+        store_txt(arch,data1)
+        arch.write("\n")
+        
+        print("se a cargado su resultado en el archivo")
+        
+finally:
+    arch.close()
